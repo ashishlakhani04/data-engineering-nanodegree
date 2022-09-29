@@ -1,0 +1,63 @@
+
+
+Apache Kafka as a Stream Processing Tool
+
+Kafka is one of the most popular streaming data platforms in the industry today.
+Provides an easy-to-use message queue interface on top of its append-only log-structured storage medium
+Kafka is a log of events
+In Kafka, an event describes something that has occurred, as opposed to a request for an action to be performed
+Kafka is distributed by default
+Fault tolerant by design, meaning it is hard to lose data if a node is suddenly lost
+Kafka scales from 1 to thousands of nodes
+Kafka provides ordering guarantees for data stored within it, meaning that the order in which data is received is the order in which data will be produced to consumers
+Commonly used data store for popular streaming tools like Apache Spark, Flink, and Samza
+
+
+https://www.uber.com/en-IN/blog/tech-stack-part-one-foundation/
+
+
+
+Kafka CLI Tools
+
+Listing topics
+First, let's see how to list topics that already exist within Kafka.
+
+kafka-topics --list --zookeeper localhost:2181
+
+The --zookeeper localhost:2181 switch tells the kafka-topics CLI where the Zookeeper ensemble Kafka is using is located. Note that in the newest versions of Kafka the --zookeeper switch is deprecated in favor of a --bootstrap-server switch that points to Kafka. The --zookeeper switch still works, but will likely be dropped in the next major revision of Kafka.
+
+We haven't created any topics yet, so what you're seeing are system topics that Kafka and other Kafka ecosystem tools make use of.
+
+Creating topics
+Now that we've seen what topics exist, let's create one.
+
+kafka-topics --create --topic "my-first-topic" --partitions 1 --replication-factor 1 --zookeeper localhost:2181
+
+To check that our topic was successfully created, let's repeat the command to list topics with a slight modification:
+
+kafka-topics --list --zookeeper localhost:2181 --topic "my-first-topic"
+
+Now, a single topic should be printed, like so:
+
+
+Producing data
+Now that we have a topic, let's add some data.
+
+kafka-console-producer --topic "my-first-topic" --broker-list PLAINTEXT://localhost:9092
+
+The switch --broker-list serves the same purpose as --zookeeper for the kafka-topics command -- it simply tells the tool where to find Kafka.
+
+
+Consuming data
+
+
+kafka-console-consumer --topic "my-first-topic" --bootstrap-server PLAINTEXT://localhost:9092
+
+kafka-console-consumer --topic "my-first-topic" --bootstrap-server PLAINTEXT://localhost:9092 --from-beginning
+
+The --from-beginning switch tells kafka-console-consumer to read data from the beginning of the topic, not just data from when we connect.
+
+let's clean up our topic.
+
+kafka-topics --delete --topic "my-first-topic" --zookeeper localhost:2181
+

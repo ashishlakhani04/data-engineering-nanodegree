@@ -58,3 +58,21 @@ Another metric to keep your eyes on is the producer response rate. This metric i
 All of these metrics may be created by using producer delivery callbacks in the client library.
 Note - The ack setting defines the number of acknowledgements required by Kafka brokers before a produced event can be considered to have been successfully published. In libraries such as librdkafka we can fine-tune this parameter, defining a specific number of brokers that must acknowledge our message. If a Kafka cluster consists of many nodes, that means that every message we produce must be acknowledged by every one of those brokers. In the simple examples, we've gone through so far this is no problem. But in a typical Kafka production environment, the Kafka Server will be handling thousands or even millions of messages per second. Even on a powerful server with significant networking capability, the time spent acknowledging messages quickly becomes a bottleneck because of the CPU cycles and network overhead required to engage with every produced message on every broker.
 
+
+Broker Performance
+
+
+The Kafka broker is the conduit through which data in a system flows.
+
+First, disk usage should be monitored as Kafka retains data, sometimes indefinitely.
+
+Network usage is a critical metric to measure.
+
+Election frequency is another important metric
+
+
+https://www.datadoghq.com/blog/monitoring-kafka-performance-metrics/
+https://docs.confluent.io/platform/current/kafka/monitoring.html
+https://newrelic.com/blog/best-practices/new-relic-kafkapocalypse
+
+

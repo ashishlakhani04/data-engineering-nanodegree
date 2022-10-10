@@ -1,0 +1,11 @@
+Like the rest of the Kafka Ecosystem tools, REST Proxy is written in Scala and Java and runs on the JVM. Because of this choice, REST Proxy can run just about anywhere.
+
+REST Proxy is a simple HTTP web server and can be deployed to just one instance, or a cluster of many instances
+
+REST proxy transforms structured JSON data from an application Kafka’s binary format and it can translate data from Kafka into a JSON payload for an application
+
+REST proxy can optionally be made aware of Schema Registry so that it can help you manage your Avro schemas.
+
+REST proxy is most useful when you really can’t use a Kafka client directly. If using a Kafka client is possible, it is strongly preferable to take that route.
+
+Kafka clients not only help abstract some of the interaction with Kafka in a more efficient way than REST proxy, but they also have substantial speed and payload size benefits as well.

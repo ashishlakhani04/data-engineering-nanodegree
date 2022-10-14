@@ -1,0 +1,40 @@
+
+Faust Stream Processors and Operations
+
+Faust provides the ability to provide pre-defined processor callbacks for data streams. Processors can add 
+missing fields, change the meaning of fields, and perform any kind of desired processing.
+
+
+Faust Processors - Key Points
+https://faust.readthedocs.io/en/latest/userguide/streams.html#id2
+Processors promote reusability and clarity in your code
+Processors may execute synchronously or asynchronously within the context of your code
+All defined processors will run, in the order they were defined, before the final value is generated.
+
+
+Faust Operations - Key Points
+
+https://faust.readthedocs.io/en/latest/userguide/streams.html#operations
+The group_by operation ingests every incoming event from a source topic, and emits it to an intermediate topic with the newly specified key
+The filter operation uses a boolean function to determine whether or not a particular record should be kept or discarded. Any records that are kept are written to a new intermediate stream.
+The take operation bundles groups of events before invoking another iteration of the stream. Be careful to specify the within datetime.timedelta argument to this function, otherwise your program may hang.
+
+
+Faust Tables
+Faust provides an API for creating stateful applications with streaming Tables.
+
+In this section, you will learn how to fully leverage the Faust Tables API.
+
+
+https://faust.readthedocs.io/en/latest/userguide/tables.html#basics
+Tables must be co-partitioned with the streams they are aggregating. Use the group_by operation to ensure co-partitioning.(https://faust.readthedocs.io/en/latest/userguide/tables.html#id3)
+Tables which are not co-partitioned may lead to inaccurate results.
+
+
+Faust Windowing - Key Points
+Faust supports Hopping and Tumbling windows
+Windowing applies only to Tables
+Faust provides semantics for classifying specifically which pool of data is desired from a window, such as current(), now(), relative_to_now(), etc.
+
+
+

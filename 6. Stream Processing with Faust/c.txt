@@ -1,0 +1,68 @@
+
+Faust Deserialization
+
+Topic deserialization in Faust is a simple and painless process. Similar to how you might specify a schema for key and value to confluent_kafka, with Faust you can provide key and value types. These value types may be primitives such as int or str, or complex types represented as objects.
+
+
+Faust Deserialization - Key Points
+All data model classes must inherit from the faust.Record class if you wish to use them with a Faust topic.
+It is a good idea to specify the serializer type on your so that Faust will deserialize data in this format by default.
+It is a good practice to set validation=True on your data models. When set to true, Faust will enforce that the data being deserialized from Kafka matches the expected type.
+E.g., if we expect a str for a field, but receive an int, Faust will raise an error.
+
+https://faust.readthedocs.io/en/latest/userguide/models.html#codec-registry
+
+
+
+Storage in Faust
+
+
+Faust keeps track of all state changes in stream processing applications in a topic dedicated to each stream.
+Doing so allows Faust to scale up from one node to thousands of processing nodes without skipping a beat.
+
+Storing State In Memory
+
+When a Faust application starts and reads state from the changelog topic, or as it processes data during execution, it needs to store the current state of the application somewhere.
+
+
+
+The first, and default, option, is to simply store the state in memory – this means that an up-to-date copy of the state of a table is kept in application memory on every node.
+
+
+While this is fast and simple to reason about, it has significant disadvantages:
+
+Every time the application restarts it has to completely rebuild state from the Kafka changelog topic.
+
+It might take our application minutes or even hours to recover and begin processing again.
+
+What happens if the state of the table is too large to fit in memory?
+
+Because of these significant disadvantages, it is not recommended to use in-memory storage for anything but testing and local development where data sets are limited, and recovery times aren't critical.
+
+Storing State in RocksDB
+
+The second option for storing application state locally is to use RocksDB.
+
+RocksDB is a highly performant datastore that runs side-by-side with a stream processing application.
+As changes are made in your streaming table, the state is stored in RocksDB in addition to being sent to Kafka.
+It is always recommended to use RocksDB in production.
+
+
+
+
+How does Faust manage that state?
+
+Faust does all of this for you automatically using aiokafka.
+
+Faust creates a Kafka consumer within the context of the underlying library which is responsible for subscribing and consuming events from any requested topics.
+
+The aiokafka consumer is responsible for managing the offsets, and will periodically commit its offsets back to Kafka.
+
+The consumer can then forward the message onto the subscribed agent for the topic, where it is processed.
+
+When the processing of an event completes the message is automatically acknowledged.
+
+
+https://faust.readthedocs.io/en/latest/userguide/streams.html#id1
+https://faust.readthedocs.io/en/latest/userguide/streams.html#id3
+Faust applications may choose to forward processed messages on to another stream by using the topic.send(<data>) function at the end of the processing loop.

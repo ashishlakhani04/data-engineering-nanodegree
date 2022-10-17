@@ -1,0 +1,96 @@
+
+
+Stream Creation
+
+There are two options for creating streams in KSQL:
+
+Define the stream attributes and types with a create statement
+Create a stream with a select that excludes or modifies data from another stream
+Creating Streams from an underlying topic requires you to specify column names and their types
+
+You must also specify the serialization format as one of JSON, AVRO, or DELIMITED (csv)
+You must also specify the underlying topic name
+You may create a stream from another existing stream with CREATE STREAM <stream_name> AS SELECT …
+
+For Additional resources regarding KSQL stream creation, check out the following links:
+https://docs.confluent.io/current/ksql/docs/developer-guide/syntax-reference.html#create-stream
+https://docs.confluent.io/current/ksql/docs/developer-guide/syntax-reference.html#create-stream-as-select
+
+
+
+SHOW TOPICS;
+
+CREATE STREAM clickevents
+  (email VARCHAR,
+   timestamp VARCHAR,
+   uri VARCHAR,
+   number INTEGER)
+  WITH (KAFKA_TOPIC='com.udacity.streams.clickevents',
+        VALUE_FORMAT='JSON');
+
+
+CREATE STREAM popular_uris AS
+  SELECT * FROM clickevents
+  WHERE number >= 100;
+
+
+CREATE TABLE pages
+  (uri VARCHAR,
+   description VARCHAR,
+   created VARCHAR)
+  WITH (KAFKA_TOPIC='com.udacity.streams.pages',
+        VALUE_FORMAT='JSON',
+        KEY='uri');
+
+CREATE TABLE a_pages AS
+  SELECT * FROM pages WHERE uri LIKE 'http://www.a%';
+
+
+
+Tumbling Windows
+
+CREATE STREAM clickevents_tumbling AS
+  SELECT * FROM clickevents
+  WINDOW TUMBLING (SIZE 30 SECONDS);
+
+Hopping Windows
+
+CREATE TABLE clickevents_hopping AS
+  SELECT uri FROM clickevents
+  WINDOW HOPPING (SIZE 30 SECONDS, ADVANCE BY 5 SECONDS)
+  WHERE uri LIKE 'http://www.b%'
+  GROUP BY uri;
+
+
+Session Windows
+
+CREATE TABLE clickevents_session AS
+  SELECT uri FROM clickevents
+  WINDOW SESSION (5 MINUTES)
+  WHERE uri LIKE 'http://www.b%'
+  GROUP BY uri;
+
+
+KSQL Aggregates
+
+SELECT uri, SUM(number)
+FROM clickevents
+GROUP BY uri;
+
+
+SELECT uri,
+  SUM(number) AS total_number,
+  HISTOGRAM(uri) AS num_uri
+FROM clickevents
+GROUP BY uri;
+
+SELECT uri , TOPK(number, 5)
+FROM clickevents
+WINDOW TUMBLING (SIZE 30 SECONDS)
+GROUP BY uri;
+
+
+
+
+
+

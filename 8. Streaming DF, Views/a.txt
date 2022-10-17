@@ -1,0 +1,11 @@
+
+Spark Sources
+
+Spark Streams can read from various input sources
+So far we have read from a static file using just Spark without streaming
+Spark Streams have the ability to monitor folders, watching for files as they appear, and then read them in real-time
+Perhaps the most flexible source to read from is Kafka, because of its ability to broker data
+Another source that can be used primarily for testing is a Unix socket - we will not be going into this in the course, but it can be useful for learning
+
+
+https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html

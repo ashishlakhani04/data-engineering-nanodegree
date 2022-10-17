@@ -1,0 +1,54 @@
+KSQL is a SQL-like abstraction developed by Confluent, which provides users the ability to create streams and tables. Students will see how to write simple SQL queries to turn their Kafka topics into KSQL streams and tables, and then write those tables back out to Kafka. This section will focus on instructing students on the syntax of KSQL, as well as developing an understanding of how keys, joins, tables, streams, as well as storage works. Students will also learn how to leverage windowing in KSQL.
+
+In this lesson we will learn:
+
+What KSQL is and how it is architected
+Why you would choose KSQL vs. an application framework like Faust
+How to turn Kafka Topics into KSQL Tables
+How to turn Kafka Topics into KSQL Streams
+How we can query KSQL
+How we can window in KSQL
+How to aggregate data in KSQL
+How to join data in KSQL
+
+
+Glossary of Key Terms You Will Learn in this Lesson
+
+Kafka Streams - A Java library for constructing stream processing applications. KSQL translates SQL statements to Kafka Streams applications.
+User Defined Function (UDF) - An extension to the SQL capabilities of KSQL written by the user. For KSQL, these are written in Java.
+Key (KSQL) - Data that uniquely identifies the value contained in this data message relative to other pieces of data in the stream. For example, a user_id may uniquely identify a user object.
+Session Windowing (KSQL) - A system that keeps track of when the last time a particular key was seen. When a new record with the same key arrives, the difference between the timestamps is calculated. If the difference is larger than a defined session window, then a new window is started for that session. If the difference is less than the defined session window, the new record is added to the existing window.
+
+
+Intro to KSQL
+KSQL provides a SQL-like interface to transform Kafka Topics into streams and tables.
+
+Joins, aggregates, filtering, and other forms of data manipulation can then be expressed over these streams and tables.
+
+
+KSQL Architecture
+
+KSQL is a Java application built on top of the Kafka Streams Java stream processing library. KSQL is a web-server with a REST API that accepts incoming or preconfigured requests containing SQL-like commands. These commands are translated by the KSQL server into the equivalent Kafka Streams application and then executed.
+
+Users can interact with KSQL via a REST API, its dedicated CLI, or predefined SQL files.
+
+KSQL was built by Confluent and released in 2018, in an attempt to bring stream processing to more users.
+
+KSQL is built and open-sourced by Confluent, the major contributors and maintainers to the Apache Kafka open source project.
+
+KSQL itself is a web server that accepts incoming HTTP REST calls to configure underlying Kafka Streams components to execute the stream processes described in our SQL queries.
+
+KSQL uses a Kafka topic as a changelog, and RocksDB to store local state on every node where KSQL is deployed.
+
+
+
+Pros
+It is often simpler to use KSQL and SQL than to build and deploy an entire application
+KSQL is typically a better fit for rapid experimentation and exploration than a full stream processing application
+KSQL doesn’t require a particular programming language, like Python for Faust, or Java for Kafka Streams
+KSQL already comes bundled with standard logs, metrics, and tooling for you to use, so you don’t have to build it yourself
+Cons
+SQL does not always best capture certain types of data manipulation or remapping scenarios
+Can’t just use whatever other libraries you want like you can with Faust
+However, KSQL does allow User Defined Functions (UDFs), written in Java
+
